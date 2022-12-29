@@ -10,7 +10,6 @@ import SceneKit
 import Foundation
 
 class TransformVisualization: NSObject, VirtualContentController {
-    
     var contentNode: SCNNode?
 
     // Load multiple copies of the axis origin visualization for the transforms this class visualizes.
@@ -43,7 +42,7 @@ class TransformVisualization: NSObject, VirtualContentController {
         // let pitch = asin(-faceAnchor.transform[2][1]) * (180/3.14156)
         // let yaw = atan2(faceAnchor.transform[2][0], faceAnchor.transform[2][2]) * (180/3.14156)
         // let roll = atan2(faceAnchor.transform[0][1], faceAnchor.transform[1][1]) * (180/3.14156)
-        self.udpSend(textToSend: faceAnchor.description, address: "192.168.1.126", port: 54326)
+        self.udpSend(textToSend: faceAnchor.description, address: "192.168.1.126", inport: 54326)
     }
     
     func addEyeTransformNodes() {
@@ -57,32 +56,37 @@ class TransformVisualization: NSObject, VirtualContentController {
         anchorNode.addChildNode(leftEyeNode)
     }
 
-    func udpSend(textToSend: String, address: String, port: CUnsignedShort) {
+    var fd: Int32 = 0
 
-        func htons(value: CUnsignedShort) -> CUnsignedShort {
-            return (value << 8) + (value >> 8);
+    deinit {
+        if (fd != 0) {
+            close(fd)
+        }
+    }
+
+    func udpSend(textToSend: String, address: String, inport: UInt16) {
+        if (fd == 0) {
+            fd = socket(AF_INET, SOCK_DGRAM, 0) // DGRAM makes it UDP
         }
 
-        let fd = socket(AF_INET, SOCK_DGRAM, 0) // DGRAM makes it UDP
+        var port = inport
+        if (NSHostByteOrder() == NS_LittleEndian) {
+            port = NSSwapShort(port)
+        }
 
         var addr = sockaddr_in()
         addr.sin_len = UInt8(MemoryLayout.size(ofValue: addr))
         addr.sin_family = sa_family_t(AF_INET)
         addr.sin_addr.s_addr = inet_addr(address)
-        addr.sin_port = htons(value: port)
+        addr.sin_port = port
 
-        let sent = textToSend.withCString { cstr -> Int in
+        textToSend.withCString { cstr -> () in
             var localCopy = addr
 
-            let sent = withUnsafePointer(to: &localCopy) { pointer -> Int in
+            withUnsafePointer(to: &localCopy) { pointer -> () in
                 let memory = UnsafeRawPointer(pointer).bindMemory(to: sockaddr.self, capacity: 1)
-                let sent = sendto(fd, cstr, strlen(cstr), 0, memory, socklen_t(addr.sin_len))
-                return sent
+                sendto(fd, cstr, strlen(cstr), 0, memory, socklen_t(addr.sin_len))
             }
-
-            return sent
         }
-
-        close(fd)
     }
 }

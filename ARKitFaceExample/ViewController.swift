@@ -92,6 +92,7 @@ class ViewController: UIViewController, ARSessionDelegate {
         let configuration = ARFaceTrackingConfiguration()
         if #available(iOS 13.0, *) {
             configuration.maximumNumberOfTrackedFaces = ARFaceTrackingConfiguration.supportedNumberOfTrackedFaces
+            NSLog("supportedNumberOfTrackedFaces = " + ARFaceTrackingConfiguration.supportedNumberOfTrackedFaces.description)
         }
         configuration.isLightEstimationEnabled = true
         configuration.worldAlignment = ARConfiguration.WorldAlignment.gravity
