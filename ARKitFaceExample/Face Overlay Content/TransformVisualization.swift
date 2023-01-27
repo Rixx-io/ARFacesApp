@@ -12,7 +12,7 @@ import Foundation
 class TransformVisualization: NSObject, VirtualContentController {
     var contentNode: SCNNode?
 
-    let destIP = "192.168.50.25"
+    let destIP = "192.168.2.1"
     let destPort: UInt16 = 54326
 
     // Load multiple copies of the axis origin visualization for the transforms this class visualizes.
@@ -47,7 +47,11 @@ class TransformVisualization: NSObject, VirtualContentController {
         // let pitch = asin(-faceAnchor.transform[2][1]) * (180/3.14156)
         // let yaw = atan2(faceAnchor.transform[2][0], faceAnchor.transform[2][2]) * (180/3.14156)
         // let roll = atan2(faceAnchor.transform[0][1], faceAnchor.transform[1][1]) * (180/3.14156)
-        self.udpSend(textToSend: faceAnchor.description, address: "172.20.10.2", inport: 54326)
+        // self.udpSend(textToSend: faceAnchor.description)
+        // print("\(faceAnchor.description)")
+        self.udpSend(textToSend: udpDescription(face: faceAnchor))
+        // self.udpSend(textToSend: "Hello")
+
     }
     
     func addEyeTransformNodes() {
@@ -63,6 +67,38 @@ class TransformVisualization: NSObject, VirtualContentController {
         // anchorNode.addChildNode(leftEyeNode)
     }
 
+
+    func udpDescription(face: ARFaceAnchor) -> String {
+        var d: [String: Any] = [:]
+
+        func pry(_ transform: simd_float4x4) -> [Float] {
+            let rad2deg = 180 / Float.pi
+            let pitch = asin(-transform[2][1]) * rad2deg
+            let roll = atan2(transform[0][1], transform[1][1]) * rad2deg
+            let yaw = atan2(transform[2][0], transform[2][2]) * rad2deg
+            return [pitch, roll, yaw]
+        }
+
+        func xyz(_ transform: simd_float4x4) -> [Float] {
+            return [transform[3][0], transform[3][1], transform[3][2]]
+        }
+
+        d["identifier"] = "\(face.identifier)"
+        d["tracked"] = face.isTracked
+
+        d["translation"] = xyz(face.transform)
+        d["orientation"] = pry(face.transform)
+
+        d["lefteye"]  = ["orientation": pry(face.leftEyeTransform)]
+        d["righteye"] = ["orientation": pry(face.rightEyeTransform)]
+        d["lookatpoint"] = [face.lookAtPoint[0], face.lookAtPoint[1], face.lookAtPoint[2]]
+
+        d["tongueout"] = face.blendShapes[.tongueOut]
+
+        let j = try! JSONSerialization.data(withJSONObject: d, options: [])
+        return String(data: j, encoding: .utf8)!
+    }
+
     var fd: Int32 = 0
     var dest = sockaddr_in()
 
@@ -73,6 +109,7 @@ class TransformVisualization: NSObject, VirtualContentController {
     }
 
     func udpSetup(address: String, inport: UInt16) {
+        print("sending to \(address):\(inport)")
         fd = socket(AF_INET, SOCK_DGRAM, 0) // DGRAM makes it UDP
 
         var port = inport
@@ -86,7 +123,7 @@ class TransformVisualization: NSObject, VirtualContentController {
         dest.sin_port = port
     }
 
-    func udpSend(textToSend: String, address: String, inport: UInt16) {
+    func udpSend(textToSend: String) {
         textToSend.withCString { cstr -> () in
             var localCopy = dest
 
