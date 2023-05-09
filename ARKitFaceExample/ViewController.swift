@@ -15,6 +15,7 @@ class ViewController: UIViewController, ARSessionDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var tabBar: UITabBar!
+    @IBOutlet var connectionIndicator: UILabel!
 
     // MARK: Properties
     

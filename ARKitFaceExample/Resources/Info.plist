@@ -24,6 +24,12 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>The camera is used for augmenting reality</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>external-accessory</string>
+		<string>nearby-interaction</string>
+		<string>processing</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

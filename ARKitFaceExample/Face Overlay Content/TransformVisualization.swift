@@ -1,10 +1,3 @@
-/*
-See LICENSE folder for this sample’s licensing information.
-
-Abstract:
-Displays coordinate axes visualizing the tracked face pose (and eyes in iOS 12).
-*/
-
 import ARKit
 import SceneKit
 import Foundation
@@ -12,8 +5,7 @@ import Foundation
 class TransformVisualization: NSObject, VirtualContentController {
     var contentNode: SCNNode?
 
-    let destIP = "192.168.2.1"
-    let destPort: UInt16 = 54326
+    var finder: ServiceFinder?
 
     // Load multiple copies of the axis origin visualization for the transforms this class visualizes.
     lazy var rightEyeNode = SCNReferenceNode(named: "coordinateOrigin")
@@ -93,6 +85,7 @@ class TransformVisualization: NSObject, VirtualContentController {
         d["righteye"] = ["orientation": pry(face.rightEyeTransform)]
         d["lookatpoint"] = [face.lookAtPoint[0], face.lookAtPoint[1], face.lookAtPoint[2]]
 
+        // https://developer.apple.com/documentation/arkit/arfaceanchor/2928251-blendshapes
         d["tongueout"] = face.blendShapes[.tongueOut]
 
         let j = try! JSONSerialization.data(withJSONObject: d, options: [])
@@ -108,22 +101,41 @@ class TransformVisualization: NSObject, VirtualContentController {
         }
     }
 
-    func udpSetup(address: String, inport: UInt16) {
-        print("sending to \(address):\(inport)")
-        fd = socket(AF_INET, SOCK_DGRAM, 0) // DGRAM makes it UDP
+    func udpSetup() {
+        finder = ServiceFinder("face-receiver")
 
-        var port = inport
-        if (NSHostByteOrder() == NS_LittleEndian) {
-            port = NSSwapShort(port)
+        Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { timer in
+            let dest = self.finder!.bestDest()
+            if (dest != nil) {
+                if (!self.connected) {
+                    self.connected = true
+                    self.connectionIndicator.text = "🟢"
+                }
+            } else {
+                if (self.connected) {
+                    self.connected = false
+                    self.connectionIndicator.text = "🔴"
+                }
+                
+            }
+            self.udpSend("ping")
         }
-
-        dest.sin_len = UInt8(MemoryLayout.size(ofValue: dest))
-        dest.sin_family = sa_family_t(AF_INET)
-        dest.sin_addr.s_addr = inet_addr(address)
-        dest.sin_port = port
     }
 
     func udpSend(textToSend: String) {
+        let bestDest = finder!.bestDest()
+        if (bestDest !== currentDest) {
+            currentDest = bestDest
+            if (currentDest != nil) {
+                print("Connected to \(currentDest!.ip):\(currentDest!.port)")
+            } else {
+                print("No connection!")
+            }
+        }
+        if (currentDest == nil) {
+            return
+        }
+
         textToSend.withCString { cstr -> () in
             var localCopy = dest
 

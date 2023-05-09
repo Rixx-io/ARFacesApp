@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.23.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.16.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,16 +24,21 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <items>
                                     <tabBarItem title="Transforms" image="transforms" id="E1z-NA-Fpn"/>
-                                    <tabBarItem tag="1" title="Texture" image="texture" id="ojh-No-ZFu"/>
-                                    <tabBarItem tag="2" title="3D Overlay" image="geometry" id="KfS-zA-F51"/>
-                                    <tabBarItem tag="3" title="Video Texture" image="videoTexture" id="BVU-uW-xoW"/>
-                                    <tabBarItem tag="4" title="Blend Shapes" image="blendShapes" id="zTx-ta-V3U"/>
                                 </items>
                                 <connections>
-                                    <outlet property="delegate" destination="BV1-FR-VrT" id="DBZ-Ne-uk1"/>
+                                    <outlet property="delegate" destination="deV-x7-99p" id="DTK-36-3vT"/>
                                 </connections>
                             </tabBar>
+                            <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="🔴" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="deV-x7-99p">
+                                <rect key="frame" x="29" y="757" width="23" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="GBj-4O-Whc"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="E6c-py-dvH" secondAttribute="bottom" id="4Ch-Kb-0fx"/>
@@ -46,7 +49,6 @@
                             <constraint firstItem="d27-hx-eNe" firstAttribute="leading" secondItem="GBj-4O-Whc" secondAttribute="leading" id="txU-4e-gMI"/>
                             <constraint firstItem="E6c-py-dvH" firstAttribute="top" secondItem="RLh-bf-1c3" secondAttribute="top" id="yHv-rs-Wlk"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="GBj-4O-Whc"/>
                     </view>
                     <connections>
                         <outlet property="sceneView" destination="E6c-py-dvH" id="Gr4-Uw-Z4A"/>
@@ -66,7 +68,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unsupported Device" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oqL-yC-UYf">
-                                <rect key="frame" x="20" y="290.33333333333331" width="335" height="31.666666666666686"/>
+                                <rect key="frame" x="20" y="288.33333333333331" width="335" height="33.666666666666686"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -81,6 +83,7 @@ Shipping apps must support devices without face tracking. In your app, offer UI 
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="xCr-dq-97a"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="oqL-yC-UYf" firstAttribute="centerX" secondItem="nKl-Ig-Sg0" secondAttribute="centerX" id="4XK-M5-Qld"/>
@@ -91,7 +94,6 @@ Shipping apps must support devices without face tracking. In your app, offer UI 
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ach-rh-boK" secondAttribute="trailing" constant="20" symbolic="YES" id="hbq-EQ-aUs"/>
                             <constraint firstItem="Ach-rh-boK" firstAttribute="top" secondItem="oqL-yC-UYf" secondAttribute="bottom" constant="8" symbolic="YES" id="mW3-Zk-UIb"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="xCr-dq-97a"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="01d-4b-zAD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -100,10 +102,6 @@ Shipping apps must support devices without face tracking. In your app, offer UI 
         </scene>
     </scenes>
     <resources>
-        <image name="blendShapes" width="84" height="84"/>
-        <image name="geometry" width="84" height="84"/>
-        <image name="texture" width="84" height="84"/>
-        <image name="transforms" width="84" height="84"/>
-        <image name="videoTexture" width="84" height="84"/>
+        <image name="transforms" width="28" height="28"/>
     </resources>
 </document>
