@@ -124,7 +124,6 @@ class ServiceFinder {
     var lookingFor: String
     
     init(_ inlookingFor: String) {
-        print("ServiceFinder")
         lookingFor = inlookingFor
         var error = DNSServiceBrowse(&browseSR, 0, 0, "_x-plane9._udp", "local", browseReply, Unmanaged.passUnretained(self).toOpaque())
         if (error != 0) {

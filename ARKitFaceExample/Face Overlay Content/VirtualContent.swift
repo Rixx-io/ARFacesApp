@@ -11,10 +11,10 @@ import SceneKit
 enum VirtualContentType: Int {
     case transforms, texture, geometry, videoTexture, blendShape
     
-    func makeController() -> VirtualContentController {
+    func makeController(_ view: ViewController) -> VirtualContentController {
         switch self {
         case .transforms:
-            return TransformVisualization()
+            return TransformVisualization(view)
         case .texture:
             return TexturedFace()
         case .geometry:

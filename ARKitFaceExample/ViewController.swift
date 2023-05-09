@@ -34,7 +34,7 @@ class ViewController: UIViewController, ARSessionDelegate {
             // If there are anchors already (switching content), create new controllers and generate updated content.
             // Otherwise, the content controller will place it in `renderer(_:didAdd:for:)`.
             for anchor in faceAnchorsAndContentControllers.keys {
-                let contentController = selectedVirtualContent.makeController()
+                let contentController = selectedVirtualContent.makeController(self)
                 if let node = sceneView.node(for: anchor),
                 let contentNode = contentController.renderer(sceneView, nodeFor: anchor) {
                     node.addChildNode(contentNode)
@@ -142,7 +142,7 @@ extension ViewController: ARSCNViewDelegate {
         // If this is the first time with this anchor, get the controller to create content.
         // Otherwise (switching content), will change content when setting `selectedVirtualContent`.
         DispatchQueue.main.async {
-            let contentController = self.selectedVirtualContent.makeController()
+            let contentController = self.selectedVirtualContent.makeController(self)
             if node.childNodes.isEmpty, let contentNode = contentController.renderer(renderer, nodeFor: faceAnchor) {
                 node.addChildNode(contentNode)
                 self.faceAnchorsAndContentControllers[faceAnchor] = contentController

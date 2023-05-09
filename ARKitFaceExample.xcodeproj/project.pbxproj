@@ -21,6 +21,7 @@
 		C81DA0C61F4CC79A002AF1DA /* FaceOcclusionOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81DA0C51F4CC79A002AF1DA /* FaceOcclusionOverlay.swift */; };
 		C8904E551F4CFD000089E530 /* VirtualContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8904E541F4CFD000089E530 /* VirtualContent.swift */; };
 		C8904E571F4CFD730089E530 /* TexturedFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8904E561F4CFD730089E530 /* TexturedFace.swift */; };
+		D82D75502A0AE40700BD6485 /* ServiceFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82D754F2A0AE40700BD6485 /* ServiceFinder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		C81DA0C51F4CC79A002AF1DA /* FaceOcclusionOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceOcclusionOverlay.swift; sourceTree = "<group>"; };
 		C8904E541F4CFD000089E530 /* VirtualContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualContent.swift; sourceTree = "<group>"; };
 		C8904E561F4CFD730089E530 /* TexturedFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TexturedFace.swift; sourceTree = "<group>"; };
+		D82D754F2A0AE40700BD6485 /* ServiceFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceFinder.swift; sourceTree = "<group>"; };
 		D849CFDF29706D31001249C1 /* swift-service-discovery */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "swift-service-discovery"; path = "../swift-service-discovery"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,9 +98,10 @@
 			isa = PBXGroup;
 			children = (
 				3929C48B1E89EC2C00E00B60 /* AppDelegate.swift */,
+				D82D754F2A0AE40700BD6485 /* ServiceFinder.swift */,
+				11EE23D1213479CF00C0DEAD /* Utilities.swift */,
 				3929C48D1E89EC2C00E00B60 /* ViewController.swift */,
 				C8904E581F4CFE380089E530 /* Face Overlay Content */,
-				11EE23D1213479CF00C0DEAD /* Utilities.swift */,
 				1488324C1EFC3ED00043E0AB /* Resources */,
 			);
 			path = ARKitFaceExample;
@@ -218,6 +221,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				116FDD742130A6BD008404D3 /* TransformVisualization.swift in Sources */,
+				D82D75502A0AE40700BD6485 /* ServiceFinder.swift in Sources */,
 				C81DA0C61F4CC79A002AF1DA /* FaceOcclusionOverlay.swift in Sources */,
 				11012C161F3D07BC0099F3A4 /* BlendShapeCharacter.swift in Sources */,
 				3929C48E1E89EC2C00E00B60 /* ViewController.swift in Sources */,

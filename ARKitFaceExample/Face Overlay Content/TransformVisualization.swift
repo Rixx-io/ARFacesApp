@@ -4,13 +4,18 @@ import Foundation
 
 class TransformVisualization: NSObject, VirtualContentController {
     var contentNode: SCNNode?
-
-    var finder: ServiceFinder?
-
+    var view: ViewController
+    
     // Load multiple copies of the axis origin visualization for the transforms this class visualizes.
     lazy var rightEyeNode = SCNReferenceNode(named: "coordinateOrigin")
     lazy var leftEyeNode = SCNReferenceNode(named: "coordinateOrigin")
     
+    init(_ inview: ViewController) {
+        view = inview
+        super.init()
+        self.udpSetup()
+    }
+
     /// - Tag: ARNodeTracking
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         // This class adds AR content only for face anchors.
@@ -21,9 +26,7 @@ class TransformVisualization: NSObject, VirtualContentController {
 
         // Add content for eye tracking in iOS 12.
         self.addEyeTransformNodes()
-
-        self.udpSetup(address: destIP, inport: destPort)
-
+        
         // Provide the node to ARKit for keeping in sync with the face anchor.
         return contentNode
     }
@@ -41,7 +44,7 @@ class TransformVisualization: NSObject, VirtualContentController {
         // let roll = atan2(faceAnchor.transform[0][1], faceAnchor.transform[1][1]) * (180/3.14156)
         // self.udpSend(textToSend: faceAnchor.description)
         // print("\(faceAnchor.description)")
-        self.udpSend(textToSend: udpDescription(face: faceAnchor))
+        self.udpSend(udpDescription(face: faceAnchor))
         // self.udpSend(textToSend: "Hello")
 
     }
@@ -92,14 +95,9 @@ class TransformVisualization: NSObject, VirtualContentController {
         return String(data: j, encoding: .utf8)!
     }
 
-    var fd: Int32 = 0
-    var dest = sockaddr_in()
-
-    deinit {
-        if (fd != 0) {
-            close(fd)
-        }
-    }
+    var finder: ServiceFinder?
+    var connected = false
+    var currentDest: Dest?
 
     func udpSetup() {
         finder = ServiceFinder("face-receiver")
@@ -109,12 +107,12 @@ class TransformVisualization: NSObject, VirtualContentController {
             if (dest != nil) {
                 if (!self.connected) {
                     self.connected = true
-                    self.connectionIndicator.text = "🟢"
+//                    self.view.connectionIndicator.text = "🟢"
                 }
             } else {
                 if (self.connected) {
                     self.connected = false
-                    self.connectionIndicator.text = "🔴"
+//                    self.view.connectionIndicator.text = "🔴"
                 }
                 
             }
@@ -122,7 +120,7 @@ class TransformVisualization: NSObject, VirtualContentController {
         }
     }
 
-    func udpSend(textToSend: String) {
+    func udpSend(_ textToSend: String) {
         let bestDest = finder!.bestDest()
         if (bestDest !== currentDest) {
             currentDest = bestDest
@@ -137,11 +135,11 @@ class TransformVisualization: NSObject, VirtualContentController {
         }
 
         textToSend.withCString { cstr -> () in
-            var localCopy = dest
+            var localCopy = currentDest!.sock
 
             withUnsafePointer(to: &localCopy) { pointer -> () in
                 let memory = UnsafeRawPointer(pointer).bindMemory(to: sockaddr.self, capacity: 1)
-                sendto(fd, cstr, strlen(cstr), 0, memory, socklen_t(dest.sin_len))
+                sendto(currentDest!.fd, cstr, strlen(cstr), 0, memory, socklen_t(currentDest!.sock.sin_len))
             }
         }
     }
